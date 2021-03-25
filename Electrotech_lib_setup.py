@@ -8,12 +8,19 @@ def main():
     url = "https://github.com/qerty123/electrotech_lib/archive/refs/heads/main.zip"
     extractpath = ""
 
+    try:
+        import getpass
+    except:
+        print("Installing getpass lib")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "getpass"])
+        import getpass
+
     if os.name == "nt":
-        downpath = "C:/Users/" + os.environ.get('USER') + "/Downloads/temp.zip"
-        extractpath = "C:/Users/" + os.environ.get('USER') + "/Documents/"
+        downpath = "C:/Users/" + getpass.getuser() + "/Downloads/temp.zip"
+        extractpath = "C:/Users/" + getpass.getuser() + "/Documents/"
     else:
-        downpath = "/home/" + os.environ.get('USER') + "/Downloads/temp.zip"
-        extractpath = "/home/" + os.environ.get('USER') + "/"
+        downpath = "/home/" + getpass.getuser() + "/Downloads/temp.zip"
+        extractpath = "/home/" + getpass.getuser() + "/"
 
     for i in range(len(sys.argv) - 1):
         if sys.argv[i] == "-h" or "--help":
@@ -49,6 +56,25 @@ def main():
     print("Extracting files")
     with zipfile.ZipFile(downpath, 'r') as zip:
         zip.extractall(path=extractpath)
+
+    if os.name == "nt":
+        print("Creating shortcut")
+        f = open(extractpath + "Electrotech_lib/start.bat", "w")
+        f.write("@echo off")
+        f.write("python " + extractpath + "Electrotech_lib/launcher.py")
+        f.close()
+        try:
+            import win32com
+        except:
+            print("Installing win32com lib")
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "win32com"])
+            import win32com
+        shell = win32com.client.Dispatch("WScript.Shell")
+        shortcut = shell.CreateShortCut("C:/Users/" + getpass.getuser() + "/Desktop/Electrotech")
+        shortcut.Targetpath = extractpath + "Electrotech_lib/start.bat"
+        shortcut.WorkingDirectory = extractpath + "Electrotech_lib/"
+        shortcut.IconLocation = extractpath + "Electrotech_lib/Icon.ico"
+        shortcut.save()
 
 
 if __name__ == "__main__":

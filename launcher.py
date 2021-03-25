@@ -9,6 +9,19 @@ apps = []
 path = ""
 
 
+class SubWindow(QtWidgets.QWidget):
+    def __init__(self, filename):
+        super().__init__()
+        f = open(path + filename)
+        text = f.readline()
+        f.close()
+        layout = QtWidgets.QVBoxLayout()
+        self.label = QtWidgets.QLabel(text)
+        layout.addWidget(self.label)
+        self.setLayout(layout)
+        self.setWindowTitle(filename)
+
+
 class VisualApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -20,10 +33,20 @@ class VisualApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         self.list.addItems(apps)
         self.list.doubleClicked.connect(self.launch)
+        self.button_license.clicked.connect(self.show_license)
+        self.button_about.clicked.connect(self.show_about)
 
     def launch(self):
         way = path + apps[self.list.currentRow()] + "/" + apps[self.list.currentRow()] + ".py"
         os.system("python " + way)
+
+    def show_license(self):
+        lwindow = SubWindow("LICENSE")
+        lwindow.show()
+
+    def show_about(self):
+        awindow = SubWindow("README.md")
+        awindow.show()
 
 
 def main():
