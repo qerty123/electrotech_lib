@@ -59,7 +59,7 @@ def main():
 
     if os.name == "nt":
         print("Creating shortcut")
-        f = open(extractpath + "Electrotech_lib/start.bat", "w")
+        f = open(extractpath + "Electrotech_lib/start.bat", "w+")
         f.write("@echo off")
         f.write("python " + extractpath + "Electrotech_lib/launcher.py")
         f.close()

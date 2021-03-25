@@ -4,10 +4,13 @@ import sys
 import os
 from PyQt5 import QtWidgets
 import design
+import requests
 
 apps = []
 path = ""
-
+updatable = False
+curversion = ""
+avversion = ""
 
 class SubWindow(QtWidgets.QWidget):
     def __init__(self, filename):
@@ -35,6 +38,11 @@ class VisualApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.list.doubleClicked.connect(self.launch)
         self.button_license.clicked.connect(self.show_license)
         self.button_about.clicked.connect(self.show_about)
+        self.button_update.clicked.connect(self.update)
+        self.label_version.setText("Текущая версия " + curversion)
+        self.label_avaluable.setText("Актуальная версия " + avversion)
+        if updatable:
+            self.button_update.setEnabled(True)
 
     def launch(self):
         way = path + apps[self.list.currentRow()] + "/" + apps[self.list.currentRow()] + ".py"
@@ -48,9 +56,31 @@ class VisualApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         awindow = SubWindow("README.md")
         awindow.show()
 
+    def update(self):
+        way = path + "/Electrotech_lib_setup.py"
+        os.system("python " + way)
+
 
 def main():
     global path
+    global updatable
+    global avversion
+    global curversion
+
+    try:
+        r = requests.get("https://raw.githubusercontent.com/qerty123/electrotech_lib/main/VERSION")
+        avversion = r.content.decode(encoding="utf-8")
+    except:
+        pass
+    try:
+        f = open("VERSION", "r")
+        curversion = f.readline()
+        f.close()
+    except:
+        pass
+    if avversion != curversion:
+        updatable = True
+
     spath = os.path.realpath(__file__).split("/")
     path = os.path.realpath(__file__).replace(spath[len(spath) - 1], "")
     _, dirnames, _ = next(os.walk(path))
