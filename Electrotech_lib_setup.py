@@ -9,11 +9,11 @@ def main():
     extractpath = ""
 
     if os.name == "nt":
-        downpath = "C:/Users/" + os.getusername() + "/Downloads/temp.zip"
-        extractpath = "C:/Users/" + os.getusername() + "/Documents/"
+        downpath = "C:/Users/" + os.environ.get('USER') + "/Downloads/temp.zip"
+        extractpath = "C:/Users/" + os.environ.get('USER') + "/Documents/"
     else:
-        downpath = "/home/" + os.getusername() + "/Downloads/temp.zip"
-        extractpath = "/home/" + os.getusername() + "/"
+        downpath = "/home/" + os.environ.get('USER') + "/Downloads/temp.zip"
+        extractpath = "/home/" + os.environ.get('USER') + "/"
 
     for i in range(len(sys.argv) - 1):
         if sys.argv[i] == "-h" or "--help":
