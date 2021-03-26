@@ -87,7 +87,11 @@ def main():
     if avversion != curversion:
         updatable = True
 
-    spath = os.path.realpath(__file__).split("/")
+    spath = []
+    if os.name == "nt":
+        spath = os.path.realpath(__file__).split("\\")
+    else:
+        spath = os.path.realpath(__file__).split("/")
     path = os.path.realpath(__file__).replace(spath[len(spath) - 1], "")
     dirnames = os.listdir(path)
     for i in dirnames:

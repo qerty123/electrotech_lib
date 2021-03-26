@@ -232,7 +232,11 @@ def move_carriers(i):
 
 def main():
     global path
-    spath = os.path.realpath(__file__).split("/")
+    spath = []
+    if os.name == "nt":
+        spath = os.path.realpath(__file__).split("\\")
+    else:
+        spath = os.path.realpath(__file__).split("/")
     path = os.path.realpath(__file__).replace(spath[len(spath) - 1], "")
     for i in range(20 * tfps):
         amperage.append(0)
