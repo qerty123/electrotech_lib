@@ -2,9 +2,10 @@
 
 import sys
 import os
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 import design
 import requests
+import time
 
 apps = []
 path = ""
@@ -46,7 +47,11 @@ class VisualApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def launch(self):
         way = path + apps[self.list.currentRow()] + "/" + apps[self.list.currentRow()] + ".py"
-        os.system("python " + way)
+        # os.system("python " + way)
+        self.p = QtCore.QProcess()
+        self.p.start("python", [way])
+        self.hide()
+        self.p.finished.connect(self.show)
 
     def show_license(self):
         lwindow = SubWindow("LICENSE")
@@ -57,8 +62,9 @@ class VisualApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         awindow.show()
 
     def update(self):
-        way = path + "/Electrotech_lib_setup.py"
-        os.system("python " + way)
+        way = path + "Electrotech_lib_setup.py"
+        os.system("python " + way + " -p " + path)
+        sys.exit(0)
 
 
 def main():
@@ -83,9 +89,9 @@ def main():
 
     spath = os.path.realpath(__file__).split("/")
     path = os.path.realpath(__file__).replace(spath[len(spath) - 1], "")
-    _, dirnames, _ = next(os.walk(path))
+    dirnames = os.listdir(path)
     for i in dirnames:
-        if i[0].isalpha():
+        if os.path.isdir(os.path.join(path, i)) and i[0].isalpha():
             apps.append(i)
     app = QtWidgets.QApplication(sys.argv)
     window = VisualApp()

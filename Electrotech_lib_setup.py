@@ -57,7 +57,7 @@ def main():
     with zipfile.ZipFile(downpath, 'r') as zip:
         zip.extractall(path=extractpath)
 
-    if os.name == "nt":
+    if os.name == "nt" and False: # Temorary not use it
         print("Creating shortcut")
         f = open(extractpath + "Electrotech_lib/start.bat", "w+")
         f.write("@echo off")
@@ -71,7 +71,7 @@ def main():
             import win32com
         shell = win32com.client.Dispatch("WScript.Shell")
         shortcut = shell.CreateShortCut("C:/Users/" + getpass.getuser() + "/Desktop/Electrotech")
-        shortcut.Targetpath = extractpath + "Electrotech_lib/start.bat"
+        shortcut.Targetpath = extractpath + "Electrotech_lib/launcher.py"
         shortcut.WorkingDirectory = extractpath + "Electrotech_lib/"
         shortcut.IconLocation = extractpath + "Electrotech_lib/Icon.ico"
         shortcut.save()
