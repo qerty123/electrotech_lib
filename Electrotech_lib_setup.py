@@ -23,11 +23,11 @@ def main():
         extractpath = "/home/" + getpass.getuser() + "/"
 
     for i in range(len(sys.argv) - 1):
-        if sys.argv[i] == "-h" or "--help":
+        if sys.argv[i] == "-h" or sys.argv[i] == "--help":
             print("This setup script will install electrotech lib on your computer")
             print("Use -p or --path to set installation folder")
             sys.exit(0)
-        if sys.argv[i] == "-p" or "--path":
+        if sys.argv[i] == "-p" or sys.argv[i] == "--path":
             i += 1
             extractpath = sys.argv[i].replace('"', '')
 

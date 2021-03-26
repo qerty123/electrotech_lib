@@ -63,7 +63,13 @@ class VisualApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def update(self):
         way = path + "Electrotech_lib_setup.py"
-        os.system("python " + way + " -p " + path)
+        if os.name == "nt":
+            spath = os.path.realpath(__file__).split("\\")
+            lpath = os.path.realpath(__file__).replace(spath[len(spath) - 2] + "\\" + spath[len(spath) - 1], "")
+        else:
+            spath = os.path.realpath(__file__).split("/")
+            lpath = os.path.realpath(__file__).replace(spath[len(spath) - 2] + "/" + spath[len(spath) - 1], "")
+        os.system("python " + way + " -p " + lpath)
         sys.exit(0)
 
 
